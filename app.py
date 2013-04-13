@@ -78,6 +78,18 @@ def index():
 def login():
     return render_template('login.html')
 
+@app.route('/profile')
+def profile():
+    ticket_item = []
+    ticket_list = []
+    for item in connection.main.ticketCollection.find():
+        ticket_item.append(item['nameAndIDOfOwed'])
+        ticket_item.append(item['ticketAmount'])
+        ticket_list.append(ticket_item)
+        ticket_item = []
+    return render_template('profile.html', tickets=ticket_list)
+
+
 @app.route('/profile', methods=['POST'])
 def save_entry():
     #new_entry = personCollection.User()
@@ -92,6 +104,10 @@ def save_entry():
         print item['name']
 
     return redirect(url_for('index'))
+
+def get_tickets():
+    for item in connection.main.ticketCollection.Ticket():
+        print item
 
 
 """# We'll need a user class, but how?

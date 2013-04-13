@@ -1,13 +1,38 @@
-{% macro show_provider_button(provider_id, display_name, conn) %}
-    {% if conn %}
-    <form action="{{ url_for('flask_social.remove_connection', provider_id=conn.provider_id, provider_user_id=conn.provider_user_id) }}" method="DELETE">
-      <input type="submit" value="Disconnect {{ display_name }}" />
-    </form>
-    {% else %}
-    <form action="{{ url_for('flask_social.connect', provider_id=provider_id) }}" method="POST">
-      <input type="submit" value="Connect {{ display_name }}" />
-    </form>
-    {% endif %}
-{% endmacro %}
+<!--
+You may use this in any way, on any site, all we ask is that you please keep the link(s) crediting the author.   Though this is not mandatory, it is certainly appreciated.
+ -->
 
-{{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="static/bluebliss.css" />
+</head>
+<body>
+<div id="mainContentArea">
+	<div id="contentBox">
+        <div id="title">IOU</div>
+        <div id="linkGroup">
+            <div class="link"><a href="{{ url_for('index') }}">Home</a></div>
+            <div class="link"><a href="{{ url_for('login') }}">Login</a></div>
+            <div class="link"><a href="{{ url_for('profile') }}">Profile</a></div>
+        </div>
+        
+        <div id="blueBox"> 
+          <div id="header"></div>
+          <div class="contentTitle">Profile</div>
+            <div class="pageContent">
+            {% for item in tickets %}
+        	{{ item }}{% if not loop.last %},{% endif %}
+        	{% endfor %}
+              <br>
+              <br>
+              <form>
+              <a href="/create_ticket/">Click me</a>
+              </form>
+            </div>
+        </div>
+	</div>
+</div>
+</body>
+</html>
