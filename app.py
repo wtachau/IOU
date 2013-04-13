@@ -9,6 +9,7 @@ from flask import (
 from mongokit import Connection, Document, ObjectId
 import datetime
 from oauth import sign_url
+from flask_oauth import OAuth
 import json
 import requests
 import urllib
@@ -74,21 +75,50 @@ connection.register([User])
 connection.main.entry.Ticket()
 connection.main.entry.User()
 current = User()
+oauth = OAuth()
 
 FACEBOOK_APP_ID = "438754742875401"
 FACEBOOK_APP_SECRET = "978a9f480a199a29121ef6ff9726a5ef"
 
+facebook = oauth.remote_app('facebook',
+    base_url='https://graph.facebook.com/',
+    request_token_url=None,
+    access_token_url='/oauth/access_token',
+    authorize_url='https://www.facebook.com/dialog/oauth',
+    consumer_key=FACEBOOK_APP_ID,
+    consumer_secret=FACEBOOK_APP_SECRET,
+    request_token_params={'scope': 'email'}
+)
+
 @app.route('/')
 def login():
+    return facebook.authorize(callback=url_for('facebook_authorized',
+        next=request.args.get('next') or request.referrer or None,
+        _external=True))
+
     alreadylogged = False;
     if 'username' in session:
         alreadylogged = True;
         print "Already logged in as %s" % session['username']
-<<<<<<< HEAD
-=======
-    print ("logging on")
->>>>>>> 937fe78d09b350dc72585ecb2e1f5b5974df2b22
     return render_template('login.html', islogged = alreadylogged)
+
+@app.route('/login/authorized')
+@facebook.authorized_handler
+def facebook_authorized(resp):
+    print "ASDFA"
+    if resp is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+    session['oauth_token'] = (resp['access_token'], '')
+    me = facebook.get('/me')
+    return 'Logged in as id=%s name=%s redirect=%s' % \
+        (me.data['id'], me.data['name'], request.args.get('next'))
+
+@facebook.tokengetter
+def get_facebook_oauth_token():
+    return session.get('oauth_token')
 
 @app.route('/home')
 def home():
