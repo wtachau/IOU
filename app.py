@@ -25,7 +25,7 @@ connection = Connection(app.config['MONGODB_HOST'], app.config['MONGODB_PORT'])
 FACEBOOK_APP_ID = "438754742875401"
 FACEBOOK_APP_SECRET = "978a9f480a199a29121ef6ff9726a5ef"
 
-class Entry(Document):
+class PersonEntry(Document):
     use_dot_notation = True
 
     structure = {
@@ -36,17 +36,39 @@ class Entry(Document):
     }
 
     default_values = {'created_at': datetime.datetime.utcnow}
+    def id(self):
+        return self._id
+    def __repr__(self):
+        return '<Entry %s>' % self['name']
+
+class TicketEntry(Document):
+    use_dot_notation = True
+    __collection__='entry'
+    __database__='main'
+
+
+    structure = {
+        'nameAndIDOfOwed': (basestring, int),
+        'ticketAmount' : int,
+        'ticketType' : basestring,
+        'ticketDate' : datetime.datetime,
+        'ticketMessage' : basestring,
+        'ticketActive' : bool,
+        'nameAndIDOfOwers' : [(basestring, int)],
+    }
+
+    default_values= {'ticketDate' : datetime.datetime.utcnow}
 
     def id(self):
         return self._id
 
-    def __repr__(self):
-        return '<Entry %s>' % self['name']
-
 connection.register([Entry])
+connection.main.entry.Entry()
 collection = connection['IOU'].entries
 
-# VIEWS
+app.config.from_object(__name__)
+connection = Connection(app.config['MONGODB_HOST'], app.config['MONGODB_PORT'])
+
 @app.route('/')
 def index():
     return render_template('index.html')
