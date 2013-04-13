@@ -70,6 +70,7 @@ connection.register([User])
 connection.main.entry.Ticket()
 connection.main.entry.User()
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -78,6 +79,7 @@ def index():
 def login():
     return render_template('login.html')
 
+<<<<<<< HEAD
 @app.route('/profile')
 def profile():
     ticket_item = []
@@ -98,13 +100,30 @@ def save_entry():
     new_entry.url = request.form['email']
     new_entry.phone_number = request.form['password']
     new_entry.save()
+=======
+>>>>>>> 3191463fd9334620f4969bc53356b64c28467aa8
 
+@app.route('/loginattempt', methods=['GET', 'POST'])
+def trylogin():
+    print "here"
+    error = None
+    if request.method == 'POST':
+            session['logged_in'] = True
+            print('You were logged in')
+
+            new_entry = connection.main.personCollection.User()
+            new_entry.name = request.form['user_name']
+            new_entry.url = request.form['email']
+            new_entry.phone_number = request.form['password']
+            new_entry.save()
+    print "here2"
 
     for item in connection.main.personCollection.find():
         print item['name']
 
     return redirect(url_for('index'))
 
+<<<<<<< HEAD
 def get_tickets():
     for item in connection.main.ticketCollection.Ticket():
         print item
@@ -120,5 +139,7 @@ class User(db.Model):
     profile_url = db.StringProperty(required=True)
     access_token = db.StringProperty(required=True)  #fb OAUTH access token"""
 
+=======
+>>>>>>> 3191463fd9334620f4969bc53356b64c28467aa8
 if __name__ == '__main__':
     app.run(debug=True)
