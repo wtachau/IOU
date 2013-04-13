@@ -5,8 +5,9 @@ You may use this in any way, on any site, all we ask is that you please keep the
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
+  <title>Blue Bliss by James Reinke</title>
   <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-  <link rel="stylesheet" type="text/css" href="static/bluebliss.css" />
+  <link rel="stylesheet" type="text/css" href="/static/bluebliss.css" />
 </head>
 <body>
 <div id="mainContentArea">
@@ -15,12 +16,13 @@ You may use this in any way, on any site, all we ask is that you please keep the
         <div id="linkGroup">
             <div class="link"><a href="{{ url_for('home') }}">Home</a></div>
             <div class="link"><a href="{{ url_for('profile') }}">Profile</a></div>
-            <div class="link"><a href="{{ url_for('make_ticket') }}">Create A Ticket</a></
+            <div class="link"><a href="{{ url_for('make_ticket') }}">Create A Ticket</a></div>
+
         </div>
         
         <div id="blueBox"> 
           <div id="header"></div>
-          <div class="contentTitle">New Ticket</div>
+          <div class="contentTitle">IOU: Your Financial Friend</div>
             <div class="pageContent">
               <p>Please enter the information for your recent transaction below</p>
               <form action="{{ url_for('make_ticket') }}" method="POST" class="search-box">
@@ -41,5 +43,9 @@ You may use this in any way, on any site, all we ask is that you please keep the
         </div>
   </div>
 </div>
+<div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
 </body>
 </html>
