@@ -158,7 +158,7 @@ def profile():
         for item in connection.main.ticketCollection.find():
             if session['username'] == item['nameAndIDOfOwed'][0]:
                 balance+=item['ticketAmount']
-                printed = "Name of Friend: " + item['nameAndIDOfOwers'][0][0] + ".  Amount Owed: " + str(item['ticketAmount']) + "\n"
+                printed = "Name of Friend: " + item['nameAndIDOfOwers'][0][0] + ".  Amount: $" + str(item['ticketAmount']) + ".\n\"" + item['ticketMessage']+ "\"\n"
                 ticket_list.append(printed)
             elif(item['nameAndIDOfOwers'][0]==session['username']):
                 balance-=item['ticketAmount']
