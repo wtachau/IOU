@@ -52,14 +52,14 @@ class Ticket(Document):
     structure = {
         'nameAndIDOfOwed': (basestring, int),
         'ticketAmount' : int,
-        'ticketType' : basestring,
+        #'ticketType' : basestring,
         'ticketDate' : datetime.datetime,
         'ticketMessage' : basestring,
         'ticketActive' : bool,
         'nameAndIDOfOwers' : [(basestring, int)],
     }
 
-    default_values= {'ticketDate' : datetime.datetime.utcnow}
+    default_values= {'ticketDate' : datetime.datetime.utcnow, 'ticketActive' : True}
 
     def id(self):
         return self._id
@@ -91,7 +91,14 @@ def home():
 @app.route('/make_ticket', methods=['GET', 'POST'])
 def make_ticket():
     if (session['logged_in']):
-        print session['username']
+        if request.method=='POST':
+            new_ticket = connection.main.ticketCollection.Ticket()
+            new_ticket.nameAndIDOfOwed= (session['username'], 0)
+            new_ticket.nameAndIDOfOwers = [(request.form['friend_name'], 0)]
+            new_ticket.ticketAmount = int(request.form['amount'])
+            new_ticket.ticketMessage = request.form['message']
+            new_ticket.save()
+            return render_template('profile.html')
         return render_template('makeTix.html')
     else:
         print "NOT LOGGED IN!"
