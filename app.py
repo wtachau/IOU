@@ -22,11 +22,13 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 connection = Connection(app.config['MONGODB_HOST'], app.config['MONGODB_PORT'])
 
-FACEBOOK_APP_ID = "438754742875401"
-FACEBOOK_APP_SECRET = "978a9f480a199a29121ef6ff9726a5ef"
+personCollection = connection['personEntry'].entries
+ticketCollection = connection['ticketEntry'].entries
 
-class PersonEntry(Document):
+class User(Document):
     use_dot_notation = True
+    __collection='user'
+    __database__='main'
 
     structure = {
         'name': basestring,
@@ -41,9 +43,9 @@ class PersonEntry(Document):
     def __repr__(self):
         return '<Entry %s>' % self['name']
 
-class TicketEntry(Document):
+class Ticket(Document):
     use_dot_notation = True
-    __collection__='entry'
+    __collection='ticket'
     __database__='main'
 
 
@@ -62,12 +64,11 @@ class TicketEntry(Document):
     def id(self):
         return self._id
 
-connection.register([Entry])
-connection.main.entry.Entry()
-collection = connection['IOU'].entries
 
-app.config.from_object(__name__)
-connection = Connection(app.config['MONGODB_HOST'], app.config['MONGODB_PORT'])
+connection.register([Ticket])
+connection.register([User])
+connection.main.entry.Ticket()
+connection.main.entry.User()
 
 @app.route('/')
 def index():
@@ -79,11 +80,16 @@ def login():
 
 @app.route('/profile', methods=['POST'])
 def save_entry():
-    new_entry = collection.Entry()
+    #new_entry = personCollection.User()
+    new_entry = connection.main.personCollection.User()
     new_entry.name = request.form['user_name']
     new_entry.url = request.form['email']
     new_entry.phone_number = request.form['password']
     new_entry.save()
+
+
+    for item in connection.main.personCollection.find():
+        print item['name']
 
     return redirect(url_for('index'))
 
@@ -100,24 +106,3 @@ class User(db.Model):
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-"""@app.route('/profile')
-@login_required
-def profile():
-    return render_template(
-        'profile.html',
-        content='Profile Page',
-        facebook_conn=social.facebook.get_connection())"""
-
-
-"""
-@app.route('/results', methods=['POST'])
-def results():
-    search_term = request.form['term']
-    location = request.form['location']
-    numbers = 1
-    #numbers = range(100,200)
-    return render_template('results.html', 
-        search_term=search_term,
-        location=location,
-        integers=numbers)"""
