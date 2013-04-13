@@ -103,12 +103,16 @@ def profile():
         print session['username']
         ticket_item = []
         ticket_list = []
+        balance=0
         for item in connection.main.ticketCollection.find():
             if session['username'] == item['nameAndIDOfOwed'][0]:
+                balance+=item['ticketAmount']
                 ticket_item.append(item['nameAndIDOfOwed'])
                 ticket_item.append(item['ticketAmount'])
                 ticket_list.append(ticket_item)
                 ticket_item = []
+            elif(item['nameAndIDOfOwers'][0]==session['username']):
+                balance-=item['ticketAmount']
         return render_template('profile.html', tickets=ticket_list)
     else:
         print "NOT LOGGED IN!"
