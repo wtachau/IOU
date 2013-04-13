@@ -72,28 +72,44 @@ connection.main.entry.User()
 
 
 @app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/login')
 def login():
+    if 'username' in session:
+        print "Already logged in as %s" % session['username']
     return render_template('login.html')
 
-@app.route('/make_ticket', methods=['POST'])
-def save_ticket():
-    return redirect(url_for('index'))
+@app.route('/home')
+def home():
+    if (session['logged_in']):
+        print session['username']
+        return render_template('index.html')
+    else:
+        print "NOT LOGGED IN!"
+        return render_template('login.html')
+
+@app.route('/make_ticket', methods=['GET'])
+def make_ticket():
+    if (session['logged_in']):
+        print session['username']
+        return render_template('makeTix.html')
+    else:
+        print "NOT LOGGED IN!"
+        return render_template('login.html')
 
 @app.route('/profile')
 def profile():
-    ticket_item = []
-    ticket_list = []
-    for item in connection.main.ticketCollection.find():
-        ticket_item.append(item['nameAndIDOfOwed'])
-        ticket_item.append(item['ticketAmount'])
-        ticket_list.append(ticket_item)
+    if (session['logged_in']):
+        print session['username']
         ticket_item = []
-    return render_template('profile.html', tickets=ticket_list)
-
+        ticket_list = []
+        for item in connection.main.ticketCollection.find():
+            ticket_item.append(item['nameAndIDOfOwed'])
+            ticket_item.append(item['ticketAmount'])
+            ticket_list.append(ticket_item)
+            ticket_item = []
+        return render_template('profile.html', tickets=ticket_list)
+    else:
+        print "NOT LOGGED IN!"
+        return render_template('login.html')
 
 @app.route('/profile', methods=['POST'])
 def save_entry():
@@ -109,7 +125,6 @@ def trylogin():
     print "here"
     error = None
     if request.method == 'POST':
-            session['logged_in'] = True
             print('You were logged in')
             new_entry = connection.main.personCollection.User()
             new_entry.name = request.form['user_name']
@@ -117,12 +132,14 @@ def trylogin():
             new_entry.phone_number = request.form['password']
             new_entry.save()
 
+            session['logged_in'] = True
+            session['username'] = new_entry.name
+
     #for item in connection.main.personCollection.find():
         #print item['name']
 
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
-<<<<<<< HEAD
 def get_tickets():
     for item in connection.main.ticketCollection.Ticket():
         print item
@@ -137,6 +154,6 @@ class User(db.Model):
     name = db.StringProperty(required=True)
     profile_url = db.StringProperty(required=True)
     access_token = db.StringProperty(required=True)  #fb OAUTH access token"""
-    
+
 if __name__ == '__main__':
     app.run(debug=True)

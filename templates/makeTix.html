@@ -13,7 +13,9 @@ You may use this in any way, on any site, all we ask is that you please keep the
   <div id="contentBox">
         <div id="title">IOU</div>
         <div id="linkGroup">
-            <div class="link"><a href="{{ url_for('index') }}">Home</a></div>
+            <div class="link"><a href="{{ url_for('home') }}">Home</a></div>
+            <div class="link"><a href="{{ url_for('profile') }}">Profile</a></div>
+            <div class="link"><a href="{{ url_for('make_ticket') }}">Create A Ticket</a></
         </div>
         
         <div id="blueBox"> 
@@ -21,7 +23,7 @@ You may use this in any way, on any site, all we ask is that you please keep the
           <div class="contentTitle">New Ticket</div>
             <div class="pageContent">
               <p>Please enter the information for your recent transaction below</p>
-              <form action="{{ url_for('save_ticket') }}" method="POST" class="search-box">
+              <form action="{{ url_for('make_ticket') }}" method="POST" class="search-box">
               <input type="radio" name="direction" value="negative">I owe
               <input type="radio" name="direction" value="positive">I am owed by
               <input type="text" size="30" placeholder="Friend's Name" name="friend_name" required>
