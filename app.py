@@ -47,12 +47,6 @@ class User(Document):
     def __repr__(self):
         return '<Entry %s>' % self['name']
 
-    def logon(self):
-        args = dict(client_id=FACEBOOK_APP_ID, redirect_uri=request.path_url)
-        self.redirect(
-            "https://graph.facebook.com/oauth/authorize?" +
-            urllib.urlencode(args))
-
 class Ticket(Document):
     use_dot_notation = True
     __collection='ticket'
@@ -90,8 +84,6 @@ def login():
     if 'username' in session:
         alreadylogged = True;
         print "Already logged in as %s" % session['username']
-    current.logon()
-    print ("logging on")
     return render_template('login.html', islogged = alreadylogged)
 
 @app.route('/home')
