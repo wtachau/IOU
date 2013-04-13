@@ -24,6 +24,7 @@ You may use this in any way, on any site, all we ask is that you please keep the
           <div id="header"></div>
           <div class="contentTitle">Profile</div>
             <div class="pageContent">
+              <h1>{{balance}}</h1>
               {% for item in tickets %}
               {{ item }}{% if not loop.last %},{% endif %}
               {% endfor %}
