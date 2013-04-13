@@ -18,6 +18,10 @@ MONGODB_PORT = 27017
 DEBUG = True
 SECRET_KEY = 'development key'
 
+
+FACEBOOK_APP_ID = "438754742875401"
+FACEBOOK_APP_SECRET = "978a9f480a199a29121ef6ff9726a5ef"
+
 app = Flask(__name__) 
 app.config.from_object(__name__)
 connection = Connection(app.config['MONGODB_HOST'], app.config['MONGODB_PORT'])
@@ -42,6 +46,12 @@ class User(Document):
         return self._id
     def __repr__(self):
         return '<Entry %s>' % self['name']
+
+    def logon(self):
+        args = dict(client_id=FACEBOOK_APP_ID, redirect_uri=request.path_url)
+        self.redirect(
+            "https://graph.facebook.com/oauth/authorize?" +
+            urllib.urlencode(args))
 
 class Ticket(Document):
     use_dot_notation = True
@@ -69,7 +79,10 @@ connection.register([Ticket])
 connection.register([User])
 connection.main.entry.Ticket()
 connection.main.entry.User()
+current = User()
 
+FACEBOOK_APP_ID = "438754742875401"
+FACEBOOK_APP_SECRET = "978a9f480a199a29121ef6ff9726a5ef"
 
 @app.route('/')
 def login():
@@ -77,6 +90,8 @@ def login():
     if 'username' in session:
         alreadylogged = True;
         print "Already logged in as %s" % session['username']
+    current.logon()
+    print ("logging on")
     return render_template('login.html', islogged = alreadylogged)
 
 @app.route('/home')
