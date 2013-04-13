@@ -108,19 +108,21 @@ def make_ticket():
 def profile():
     if (session['logged_in']):
         print session['username']
-        ticket_item = []
+        #ticket_item = []
         ticket_list = []
         balance=0
         for item in connection.main.ticketCollection.find():
             if session['username'] == item['nameAndIDOfOwed'][0]:
                 balance+=item['ticketAmount']
-                ticket_item.append(item['nameAndIDOfOwed'])
-                ticket_item.append(item['ticketAmount'])
-                ticket_list.append(ticket_item)
-                ticket_item = []
+                #ticket_item.append(item['nameAndIDOfOwed'][0])
+                #ticket_item.append(item['ticketAmount'])
+                printed = "Name of Friend: " + item['nameAndIDOfOwers'][0][0] + " Amount Owed: " + str(item['ticketAmount']) + "\n"
+                #ticket_list.append(ticket_item)
+                ticket_list.append(printed)
+                #ticket_item = []
             elif(item['nameAndIDOfOwers'][0]==session['username']):
                 balance-=item['ticketAmount']
-        return render_template('profile.html', tickets=ticket_list)
+        return render_template('profile.html', tickets=ticket_list, balance=balance)
     else:
         print "NOT LOGGED IN!"
         return render_template('login.html', islogged=False)
