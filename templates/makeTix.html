@@ -1,0 +1,43 @@
+<!--
+You may use this in any way, on any site, all we ask is that you please keep the link(s) crediting the author.   Though this is not mandatory, it is certainly appreciated.
+ -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="static/bluebliss.css" />
+</head>
+<body>
+<div id="mainContentArea">
+  <div id="contentBox">
+        <div id="title">IOU</div>
+        <div id="linkGroup">
+            <div class="link"><a href="{{ url_for('index') }}">Home</a></div>
+        </div>
+        
+        <div id="blueBox"> 
+          <div id="header"></div>
+          <div class="contentTitle">New Ticket</div>
+            <div class="pageContent">
+              <p>Please enter the information for your recent transaction below</p>
+              <form action="{{ url_for('save_ticket') }}" method="POST" class="search-box">
+              <input type="radio" name="direction" value="negative">I owe
+              <input type="radio" name="direction" value="positive">I am owed by
+              <input type="text" size="30" placeholder="Friend's Name" name="friend_name" required>
+              <br>
+              <br>
+              I owe/am owed: $ <input type="text" size="20" placeholder="Amount" name="amount" required>
+              <br>
+              <br>
+              <input type="text" size="75" placeholder="Description" name="message" required>
+              <br>
+              <br>
+              <input type="submit" value="Enter">
+              </form>
+            </div>
+        </div>
+  </div>
+</div>
+</body>
+</html>
