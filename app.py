@@ -18,6 +18,10 @@ MONGODB_PORT = 27017
 DEBUG = True
 SECRET_KEY = 'development key'
 
+
+FACEBOOK_APP_ID = "438754742875401"
+FACEBOOK_APP_SECRET = "978a9f480a199a29121ef6ff9726a5ef"
+
 app = Flask(__name__) 
 app.config.from_object(__name__)
 connection = Connection(app.config['MONGODB_HOST'], app.config['MONGODB_PORT'])
@@ -43,6 +47,12 @@ class User(Document):
     def __repr__(self):
         return '<Entry %s>' % self['name']
 
+    def logon(self):
+        args = dict(client_id=FACEBOOK_APP_ID, redirect_uri=request.path_url)
+        self.redirect(
+            "https://graph.facebook.com/oauth/authorize?" +
+            urllib.urlencode(args))
+
 class Ticket(Document):
     use_dot_notation = True
     __collection='ticket'
@@ -52,14 +62,14 @@ class Ticket(Document):
     structure = {
         'nameAndIDOfOwed': (basestring, int),
         'ticketAmount' : int,
-        'ticketType' : basestring,
+        #'ticketType' : basestring,
         'ticketDate' : datetime.datetime,
         'ticketMessage' : basestring,
         'ticketActive' : bool,
         'nameAndIDOfOwers' : [(basestring, int)],
     }
 
-    default_values= {'ticketDate' : datetime.datetime.utcnow}
+    default_values= {'ticketDate' : datetime.datetime.utcnow, 'ticketActive' : True}
 
     def id(self):
         return self._id
@@ -69,13 +79,20 @@ connection.register([Ticket])
 connection.register([User])
 connection.main.entry.Ticket()
 connection.main.entry.User()
+current = User()
 
+FACEBOOK_APP_ID = "438754742875401"
+FACEBOOK_APP_SECRET = "978a9f480a199a29121ef6ff9726a5ef"
 
 @app.route('/')
 def login():
+    alreadylogged = False;
     if 'username' in session:
+        alreadylogged = True;
         print "Already logged in as %s" % session['username']
-    return render_template('login.html')
+    current.logon()
+    print ("logging on")
+    return render_template('login.html', islogged = alreadylogged)
 
 @app.route('/home')
 def home():
@@ -86,31 +103,42 @@ def home():
         print "NOT LOGGED IN!"
         return render_template('login.html')
 
-@app.route('/make_ticket', methods=['GET'])
+@app.route('/make_ticket', methods=['GET', 'POST'])
 def make_ticket():
     if (session['logged_in']):
-        print session['username']
+        if request.method=='POST':
+            new_ticket = connection.main.ticketCollection.Ticket()
+            new_ticket.nameAndIDOfOwed= (session['username'], 0)
+            new_ticket.nameAndIDOfOwers = [(request.form['friend_name'], 0)]
+            if(request.form['direction']=='negative'):
+                new_ticket.ticketAmount = -(int(request.form['amount']))
+            else:
+                new_ticket.ticketAmount = int(request.form['amount'])
+            new_ticket.ticketMessage = request.form['message']
+            new_ticket.save()
+            return render_template('profile.html')
         return render_template('makeTix.html')
     else:
         print "NOT LOGGED IN!"
-        return render_template('login.html')
+        return render_template('login.html', islogged=False)
 
 @app.route('/profile')
 def profile():
     if (session['logged_in']):
         print session['username']
-        ticket_item = []
         ticket_list = []
+        balance=0
         for item in connection.main.ticketCollection.find():
             if session['username'] == item['nameAndIDOfOwed'][0]:
-                ticket_item.append(item['nameAndIDOfOwed'])
-                ticket_item.append(item['ticketAmount'])
-                ticket_list.append(ticket_item)
-                ticket_item = []
-        return render_template('profile.html', tickets=ticket_list)
+                balance+=item['ticketAmount']
+                printed = "Name of Friend: " + item['nameAndIDOfOwers'][0][0] + ".  Amount Owed: " + str(item['ticketAmount']) + "\n"
+                ticket_list.append(printed)
+            elif(item['nameAndIDOfOwers'][0]==session['username']):
+                balance-=item['ticketAmount']
+        return render_template('profile.html', tickets=ticket_list, balance=balance)
     else:
         print "NOT LOGGED IN!"
-        return render_template('login.html')
+        return render_template('login.html', islogged=False)
 
 @app.route('/profile', methods=['POST'])
 def save_entry():
@@ -120,6 +148,13 @@ def save_entry():
     new_entry.url = request.form['email']
     new_entry.phone_number = request.form['password']
     new_entry.save()
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    print"logging out"
+    session.pop('username', None)
+    session['logged_in'] = False
+    return render_template('login.html')
 
 @app.route('/loginattempt', methods=['GET', 'POST'])
 def trylogin():

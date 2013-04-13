@@ -14,6 +14,7 @@ You may use this in any way, on any site, all we ask is that you please keep the
   <div id="contentBox">
         <div id="title">IOU</div>
         <div id="linkGroup">
+<<<<<<< HEAD
             <div class="link"><a href="{{
 	      url_for('home') }}">
 	      <img
@@ -25,6 +26,10 @@ You may use this in any way, on any site, all we ask is that you please keep the
             <div class="link""><a href="{{ url_for('make_ticket') }}"><img
 	      src="http://www.sjsu.edu/theatrearts/pics/ticket_button_for_web.gif"
 	      width="60" height="60"></a></div>
+=======
+            <div class="link"><a href="{{ url_for('profile') }}">Profile</a></div>
+            <div class="link"><a href="{{ url_for('make_ticket') }}">Create A Ticket</a></div>
+>>>>>>> 578c22a27b47c6e4f19eef742da5fc5612a98b6e
 
         </div>
         
@@ -32,9 +37,9 @@ You may use this in any way, on any site, all we ask is that you please keep the
           <div id="header"></div>
           <div class="contentTitle">Profile</div>
             <div class="pageContent">
-              <h1>{{balance}}</h1>
+              <h1>Net Balance: {{balance}}</h1>
               {% for item in tickets %}
-              {{ item }}{% if not loop.last %},{% endif %}
+              {{ item }}{% if not loop.last %}<br>{% endif %}
               {% endfor %}
             </div>
         </div>
@@ -45,4 +50,6 @@ You may use this in any way, on any site, all we ask is that you please keep the
       {% endblock %}
     </div>
 </body>
+<form action="{{ url_for('logout') }}" method="POST" class="hidden">
+<input type="submit" value="Log out">
 </html>
