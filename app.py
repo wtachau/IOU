@@ -84,6 +84,10 @@ def login():
     if 'username' in session:
         alreadylogged = True;
         print "Already logged in as %s" % session['username']
+<<<<<<< HEAD
+=======
+    print ("logging on")
+>>>>>>> 937fe78d09b350dc72585ecb2e1f5b5974df2b22
     return render_template('login.html', islogged = alreadylogged)
 
 @app.route('/home')
@@ -141,6 +145,8 @@ def save_entry():
     new_entry.url = request.form['email']
     new_entry.phone_number = request.form['password']
     new_entry.save()
+
+
 
 @app.route('/logout', methods=['POST'])
 def logout():

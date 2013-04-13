@@ -14,8 +14,17 @@ You may use this in any way, on any site, all we ask is that you please keep the
   <div id="contentBox">
         <div id="title">iOweYou</div>
         <div id="linkGroup">
-            <div class="link"><a href="{{ url_for('profile') }}">Home</a></div>
-            <div class="link"><a href="{{ url_for('make_ticket') }}">Create A Ticket</a></div>
+            <div class="link"><a href="{{
+	      url_for('home') }}">
+	      <img
+	      src="http://htiins.com/wp-content/uploads/2012/10/home-icon.png"
+	      width="50" height="50"></a></div>
+            <div class="link"><a href="{{ url_for('profile') }}"><img
+	      src="http://t1.ftcdn.net/jpg/00/27/28/24/400_F_27282401_yKHrVLgbMOLg6v059Qe3tt4OTrRYxmYl.jpg"
+	      width="50" height="50"></a></div>
+            <div class="link""><a href="{{ url_for('make_ticket') }}"><img
+	      src="http://www.sjsu.edu/theatrearts/pics/ticket_button_for_web.gif"
+	      width="60" height="60"></a></div>
 
         </div>
         
@@ -31,6 +40,33 @@ You may use this in any way, on any site, all we ask is that you please keep the
               <br>
               <br>
               I owe/am owed: $ <input type="text" size="20" placeholder="Amount" name="amount" required>
+              <br>
+              <br>
+              For:
+              <br>
+              <input type="radio" name="item" value="Pizza">Pizza
+              <input type="radio" name="item" value="Mix Bowl">Mix Bowl
+              <input type="radio" name="item" value="fries">French Fries
+              <br>
+              <input type="radio" name="item" value="Shot">Shots
+              <input type="radio" name="item" value="Beer">Beer
+              <input type="radio" name="item" value="Wine">Wine
+              <br>
+              <input type="radio" name="item" value="Mixed Drink">Mixed Drink
+              <input type="radio" name="item" value="Cigarettes">Cigarettes
+              <input type="radio" name="item" value="Tea/Coffee">Tea or Coffee
+              <br>
+              <input type="radio" name="item" value="Gas">Gas
+              <input type="radio" name="item" value="ZipCar">ZipCar
+              <input type="radio" name="item" value="room">Hotel Room
+              <br>
+              <input type="radio" name="item" value="Laundry">Laundry Detergent
+              <input type="radio" name="item" value="toiletpaper">Toilet Paper
+              <input type="radio" name="item" value="shampoo">Shampoo
+              <br>
+              <input type="radio" name="item" value="Ticket">Concert Ticket
+              <input type="radio" name="item" value="Groceries">Groceries
+              <input type="radio" name="item" value="Misc">Miscellaneous
               <br>
               <br>
               <input type="text" size="75" placeholder="Description" name="message" required>
