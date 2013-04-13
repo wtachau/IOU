@@ -47,12 +47,6 @@ class User(Document):
     def __repr__(self):
         return '<Entry %s>' % self['name']
 
-    def logon(self):
-        args = dict(client_id=FACEBOOK_APP_ID, redirect_uri=request.path_url)
-        self.redirect(
-            "https://graph.facebook.com/oauth/authorize?" +
-            urllib.urlencode(args))
-
 class Ticket(Document):
     use_dot_notation = True
     __collection='ticket'
