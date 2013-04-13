@@ -14,9 +14,17 @@ You may use this in any way, on any site, all we ask is that you please keep the
   <div id="contentBox">
         <div id="title">IOU</div>
         <div id="linkGroup">
-            <div class="link"><a href="{{ url_for('home') }}">Home</a></div>
-            <div class="link"><a href="{{ url_for('profile') }}">Profile</a></div>
-            <div class="link"><a href="{{ url_for('make_ticket') }}">Create A Ticket</a></div>
+            <div class="link"><a href="{{
+	      url_for('home') }}">
+	      <img
+	      src="http://htiins.com/wp-content/uploads/2012/10/home-icon.png"
+	      width="50" height="50"></a></div>
+            <div class="link"><a href="{{ url_for('profile') }}"><img
+	      src="http://t1.ftcdn.net/jpg/00/27/28/24/400_F_27282401_yKHrVLgbMOLg6v059Qe3tt4OTrRYxmYl.jpg"
+	      width="50" height="50"></a></div>
+            <div class="link""><a href="{{ url_for('make_ticket') }}"><img
+	      src="http://www.sjsu.edu/theatrearts/pics/ticket_button_for_web.gif"
+	      width="60" height="60"></a></div>
 
         </div>
         
