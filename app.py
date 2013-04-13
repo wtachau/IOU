@@ -108,8 +108,9 @@ def make_ticket():
                 new_ticket.ticketAmount = int(request.form['amount'])
             new_ticket.ticketMessage = request.form['message']
             new_ticket.save()
-            return render_template('profile.html')
-        return render_template('makeTix.html')
+            return redirect(url_for('profile'))
+        else:
+            return render_template('makeTix.html')
     else:
         print "NOT LOGGED IN!"
         return render_template('login.html', islogged=False)

@@ -24,8 +24,8 @@ You may use this in any way, on any site, all we ask is that you please keep the
           <div class="contentTitle">IOU: Your Financial Friend</div>
             <div class="pageContent">
               <p>Please enter the information for your recent transaction below</p>
-              <form action="{{ url_for('make_ticket') }}" method="POST" class="search-box">
-              <input type="radio" name="direction" value="negative">I owe
+              <form action="{{ url_for('make_ticket') }}" method= "POST" class="search-box">
+              <input type="radio" name="direction" value="negative" checked>I owe
               <input type="radio" name="direction" value="positive">I am owed by
               <input type="text" size="30" placeholder="Friend's Name" name="friend_name" required>
               <br>
