@@ -73,9 +73,11 @@ connection.main.entry.User()
 
 @app.route('/')
 def login():
+    alreadylogged = False;
     if 'username' in session:
+        alreadylogged = True;
         print "Already logged in as %s" % session['username']
-    return render_template('login.html')
+    return render_template('login.html', islogged = alreadylogged)
 
 @app.route('/home')
 def home():
@@ -86,14 +88,14 @@ def home():
         print "NOT LOGGED IN!"
         return render_template('login.html')
 
-@app.route('/make_ticket', methods=['GET'])
+@app.route('/make_ticket', methods=['GET', 'POST'])
 def make_ticket():
     if (session['logged_in']):
         print session['username']
         return render_template('makeTix.html')
     else:
         print "NOT LOGGED IN!"
-        return render_template('login.html')
+        return render_template('login.html', islogged=False)
 
 @app.route('/profile')
 def profile():
@@ -109,7 +111,7 @@ def profile():
         return render_template('profile.html', tickets=ticket_list)
     else:
         print "NOT LOGGED IN!"
-        return render_template('login.html')
+        return render_template('login.html', islogged=False)
 
 @app.route('/profile', methods=['POST'])
 def save_entry():
@@ -119,6 +121,13 @@ def save_entry():
     new_entry.url = request.form['email']
     new_entry.phone_number = request.form['password']
     new_entry.save()
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    print"logging out"
+    session.pop('username', None)
+    session['logged_in'] = False
+    return render_template('login.html')
 
 @app.route('/loginattempt', methods=['GET', 'POST'])
 def trylogin():
