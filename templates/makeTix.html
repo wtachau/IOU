@@ -5,14 +5,14 @@ You may use this in any way, on any site, all we ask is that you please keep the
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>Blue Bliss by James Reinke</title>
+  <title>iOweYou</title>
   <meta http-equiv="content-type" content="text/html;charset=utf-8" />
   <link rel="stylesheet" type="text/css" href="/static/bluebliss.css" />
 </head>
 <body>
 <div id="mainContentArea">
   <div id="contentBox">
-        <div id="title">IOU</div>
+        <div id="title">iOweYou</div>
         <div id="linkGroup">
             <div class="link"><a href="{{
 	      url_for('home') }}">
@@ -30,16 +30,43 @@ You may use this in any way, on any site, all we ask is that you please keep the
         
         <div id="blueBox"> 
           <div id="header"></div>
-          <div class="contentTitle">IOU: Your Financial Friend</div>
+          <div class="contentTitle">iOweYou: Your Financial Friend</div>
             <div class="pageContent">
               <p>Please enter the information for your recent transaction below</p>
-              <form action="{{ url_for('make_ticket') }}" method="POST" class="search-box">
-              <input type="radio" name="direction" value="negative">I owe
+              <form action="{{ url_for('make_ticket') }}" method= "POST" class="search-box">
+              <input type="radio" name="direction" value="negative" checked>I owe
               <input type="radio" name="direction" value="positive">I am owed by
               <input type="text" size="30" placeholder="Friend's Name" name="friend_name" required>
               <br>
               <br>
               I owe/am owed: $ <input type="text" size="20" placeholder="Amount" name="amount" required>
+              <br>
+              <br>
+              For:
+              <br>
+              <input type="radio" name="item" value="Pizza">Pizza
+              <input type="radio" name="item" value="Mix Bowl">Mix Bowl
+              <input type="radio" name="item" value="fries">French Fries
+              <br>
+              <input type="radio" name="item" value="Shot">Shots
+              <input type="radio" name="item" value="Beer">Beer
+              <input type="radio" name="item" value="Wine">Wine
+              <br>
+              <input type="radio" name="item" value="Mixed Drink">Mixed Drink
+              <input type="radio" name="item" value="Cigarettes">Cigarettes
+              <input type="radio" name="item" value="Tea/Coffee">Tea or Coffee
+              <br>
+              <input type="radio" name="item" value="Gas">Gas
+              <input type="radio" name="item" value="ZipCar">ZipCar
+              <input type="radio" name="item" value="room">Hotel Room
+              <br>
+              <input type="radio" name="item" value="Laundry">Laundry Detergent
+              <input type="radio" name="item" value="toiletpaper">Toilet Paper
+              <input type="radio" name="item" value="shampoo">Shampoo
+              <br>
+              <input type="radio" name="item" value="Ticket">Concert Ticket
+              <input type="radio" name="item" value="Groceries">Groceries
+              <input type="radio" name="item" value="Misc">Miscellaneous
               <br>
               <br>
               <input type="text" size="75" placeholder="Description" name="message" required>

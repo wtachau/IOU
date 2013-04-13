@@ -84,8 +84,6 @@ def login():
     if 'username' in session:
         alreadylogged = True;
         print "Already logged in as %s" % session['username']
-    current.logon()
-    print ("logging on")
     return render_template('login.html', islogged = alreadylogged)
 
 @app.route('/home')
@@ -110,8 +108,9 @@ def make_ticket():
                 new_ticket.ticketAmount = int(request.form['amount'])
             new_ticket.ticketMessage = request.form['message']
             new_ticket.save()
-            return render_template('profile.html')
-        return render_template('makeTix.html')
+            return redirect(url_for('profile'))
+        else:
+            return render_template('makeTix.html')
     else:
         print "NOT LOGGED IN!"
         return render_template('login.html', islogged=False)
@@ -125,7 +124,7 @@ def profile():
         for item in connection.main.ticketCollection.find():
             if session['username'] == item['nameAndIDOfOwed'][0]:
                 balance+=item['ticketAmount']
-                printed = "Name of Friend: " + item['nameAndIDOfOwers'][0][0] + ".  Amount Owed: " + str(item['ticketAmount']) + "\n"
+                printed = "Name of Friend: " + item['nameAndIDOfOwers'][0][0] + ".  Amount: $" + str(item['ticketAmount']) + ".\n\"" + item['ticketMessage']+ "\"\n"
                 ticket_list.append(printed)
             elif(item['nameAndIDOfOwers'][0]==session['username']):
                 balance-=item['ticketAmount']
@@ -142,6 +141,8 @@ def save_entry():
     new_entry.url = request.form['email']
     new_entry.phone_number = request.form['password']
     new_entry.save()
+
+
 
 @app.route('/logout', methods=['POST'])
 def logout():
