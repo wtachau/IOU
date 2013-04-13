@@ -79,14 +79,30 @@ def index():
 def login():
     return render_template('login.html')
 
-@app.route('/profile')
-def profile():
-    return render_template('profile.html')
-
 @app.route('/make_ticket', methods=['POST'])
 def save_ticket():
     return redirect(url_for('index'))
 
+@app.route('/profile')
+def profile():
+    ticket_item = []
+    ticket_list = []
+    for item in connection.main.ticketCollection.find():
+        ticket_item.append(item['nameAndIDOfOwed'])
+        ticket_item.append(item['ticketAmount'])
+        ticket_list.append(ticket_item)
+        ticket_item = []
+    return render_template('profile.html', tickets=ticket_list)
+
+
+@app.route('/profile', methods=['POST'])
+def save_entry():
+    #new_entry = personCollection.User()
+    new_entry = connection.main.personCollection.User()
+    new_entry.name = request.form['user_name']
+    new_entry.url = request.form['email']
+    new_entry.phone_number = request.form['password']
+    new_entry.save()
 
 @app.route('/loginattempt', methods=['GET', 'POST'])
 def trylogin():
@@ -106,5 +122,21 @@ def trylogin():
 
     return redirect(url_for('index'))
 
+<<<<<<< HEAD
+def get_tickets():
+    for item in connection.main.ticketCollection.Ticket():
+        print item
+
+
+"""# We'll need a user class, but how?
+class User(db.Model):
+    User Model Class
+    id = db.StringProperty(required=True) #facebook user-id
+    created = db.DateTimeProperty(auto_now_add=True)
+    updated = db.DateTimeProperty(auto_now=True)
+    name = db.StringProperty(required=True)
+    profile_url = db.StringProperty(required=True)
+    access_token = db.StringProperty(required=True)  #fb OAUTH access token"""
+    
 if __name__ == '__main__':
     app.run(debug=True)
