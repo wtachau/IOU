@@ -79,6 +79,14 @@ def index():
 def login():
     return render_template('login.html')
 
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
+@app.route('/make_ticket', methods=['POST'])
+def save_ticket():
+    return redirect(url_for('index'))
+
 
 @app.route('/loginattempt', methods=['GET', 'POST'])
 def trylogin():
@@ -87,16 +95,14 @@ def trylogin():
     if request.method == 'POST':
             session['logged_in'] = True
             print('You were logged in')
-
             new_entry = connection.main.personCollection.User()
             new_entry.name = request.form['user_name']
             new_entry.url = request.form['email']
             new_entry.phone_number = request.form['password']
             new_entry.save()
-    print "here2"
 
-    for item in connection.main.personCollection.find():
-        print item['name']
+    #for item in connection.main.personCollection.find():
+        #print item['name']
 
     return redirect(url_for('index'))
 
